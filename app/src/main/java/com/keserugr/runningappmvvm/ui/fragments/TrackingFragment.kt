@@ -85,9 +85,10 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
             toggleRun()
         }
 
-        if (savedInstanceState != null){
+        if (savedInstanceState != null) {
             val cancelTrackingDiaolog = parentFragmentManager.findFragmentByTag(
-                CANCEL_TRACKING_DIALOG_TAG) as CancelTrackingDialog?
+                CANCEL_TRACKING_DIALOG_TAG
+            ) as CancelTrackingDialog?
             cancelTrackingDiaolog?.setYesListener {
                 stopRun()
             }
@@ -152,7 +153,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
 
     private fun showCancelTrackingDialog() {
         CancelTrackingDialog().apply {
-            setYesListener{
+            setYesListener {
                 stopRun()
             }
         }.show(parentFragmentManager, CANCEL_TRACKING_DIALOG_TAG)
@@ -169,7 +170,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
         if (!isTracking && currentTimeInMillis > 0L) {
             fragmentBinding!!.btnToggleRun.text = "Start"
             fragmentBinding!!.btnFinishRun.visibility = View.VISIBLE
-        } else if(isTracking){
+        } else if (isTracking) {
             fragmentBinding!!.btnToggleRun.text = "Stop"
             menu?.getItem(0)?.isVisible = true
             fragmentBinding!!.btnFinishRun.visibility = View.GONE
@@ -209,13 +210,21 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
     private fun endRunAndSaveToDb() {
         map?.snapshot { bitmap ->
             var distanceInMeters = 0
-            for (polyline in pathPoints){
+            for (polyline in pathPoints) {
                 distanceInMeters += TrackingUtility.calculatePolyLineLength(polyline).toInt()
             }
-            val avgSpeed = round((distanceInMeters / 1000f) / (currentTimeInMillis / 1000f / 60 / 60) * 10) /10f
+            val avgSpeed =
+                round((distanceInMeters / 1000f) / (currentTimeInMillis / 1000f / 60 / 60) * 10) / 10f
             val dateTimestamp = Calendar.getInstance().timeInMillis
             val caloriesBurned = ((distanceInMeters / 1000f) * weight).toInt()
-            val run = Run(bitmap, dateTimestamp, avgSpeed, distanceInMeters, currentTimeInMillis, caloriesBurned)
+            val run = Run(
+                bitmap,
+                dateTimestamp,
+                avgSpeed,
+                distanceInMeters,
+                currentTimeInMillis,
+                caloriesBurned
+            )
             viewModel.insertRun(run)
             Snackbar.make(
                 requireActivity().findViewById(R.id.rootView),

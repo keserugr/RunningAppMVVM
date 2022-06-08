@@ -21,11 +21,6 @@ class MySharedPrefImp @Inject constructor(
     }
 
     override fun setUserDetail(user: User) {
-        /*sharedPreferences.apply {
-            edit().remove(KEY_USER)
-            val gsonString = gson.toJson(user)
-            edit().putString(KEY_USER,gsonString)
-        }*/
         sharedPreferences.edit().remove(KEY_USER).apply()
         val gsonString = gson.toJson(user)
         sharedPreferences.edit().putString(KEY_USER,gsonString).apply()

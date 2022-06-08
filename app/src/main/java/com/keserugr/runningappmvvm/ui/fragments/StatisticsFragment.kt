@@ -35,7 +35,6 @@ class StatisticsFragment: Fragment(R.layout.fragment_statistics) {
         subscribeToObservers()
         //setupBarChart()
     }
-
     //not working
     /*private fun setupBarChart(){
         barChart.xAxis.apply {
