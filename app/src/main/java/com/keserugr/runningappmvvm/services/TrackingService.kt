@@ -153,7 +153,6 @@ class TrackingService : LifecycleService() {
         isTimerEnabled = false
     }
 
-    //@SuppressLint("RestrictedApi")
     private fun updateNotificationTrackingState(isTracking: Boolean) {
         val notificationText = if (isTracking) "Pause" else "Resume"
         val pendingIntent = if (isTracking) {
@@ -177,16 +176,11 @@ class TrackingService : LifecycleService() {
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
         }
-        /*val notificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager*/
 
-        // remove the all actions in the notifications
         currentNotificationBuilder.javaClass.getDeclaredField("mActions").apply {
             isAccessible = true
             set(currentNotificationBuilder, ArrayList<NotificationCompat.Action>())
         }
-
-        //currentNotificationBuilder.mActions.clear()
 
         if(!serviceKilled){
             currentNotificationBuilder = baseNotificationBuilder
